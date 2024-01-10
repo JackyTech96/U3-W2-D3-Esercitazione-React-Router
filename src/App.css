@@ -1,0 +1,36 @@
+.nav-icons {
+  font-size: 0.8em;
+}
+.custom-dropdown-toggle {
+  background-color: #221f1f;
+  border-color: #6c757d;
+}
+.pointer-cursor {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pointer-cursor:hover {
+  transform: scale(1.1);
+}
+footer {
+  color: #838383;
+  font-size: 0.8em;
+}
+footer p {
+  margin-bottom: 0.3em;
+}
+footer a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-button {
+  background-color: #221f1f;
+  border-color: #6c757d;
+  color: inherit;
+}
+
+.copyright {
+  font-size: 0.8em;
+}
