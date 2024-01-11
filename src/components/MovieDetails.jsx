@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import NetflixFooter from "./NetflixFooter";
 
 const MovieDetails = () => {
   const params = useParams();
+  console.log(params);
   const [movieDetails, setMovieDetails] = useState(null);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,27 +15,27 @@ const MovieDetails = () => {
     const fetchMovieDetails = async () => {
       try {
         // Fetch dettagli del film da omdbAPI
-        const omdbResponse = await fetch(`http://www.omdbapi.com/?apikey=b84f7858&i=${params.movieId}`);
-        if (!omdbResponse.ok) {
+        const fetchFilms = await fetch(`http://www.omdbapi.com/?apikey=b84f7858&i=${params.movieId}`);
+        if (!fetchFilms.ok) {
           throw new Error("Errore nel fetch dei dettagli del film da omdbAPI");
         }
-        const movieDetailsData = await omdbResponse.json();
+        const movieDetailsData = await fetchFilms.json();
+        console.log(movieDetailsData);
+
         setMovieDetails(movieDetailsData);
 
         // Fetch commenti da API interna
-        const internalApiResponse = await fetch(
-          `https://striveschool-api.herokuapp.com/api/comments/${params.movieId}`,
-          {
-            headers: {
-              Authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTcxZDQ2MDBkOGEyMDAwMThhNDhhNTkiLCJpYXQiOjE3MDQ4OTcyOTAsImV4cCI6MTcwNjEwNjg5MH0.gKdA7EQ49nl_Yl12milacE3yQmFfnG09kMMCsKlRmf0",
-            },
-          }
-        );
-        if (!internalApiResponse.ok) {
+        const fetchComments = await fetch(`https://striveschool-api.herokuapp.com/api/comments/${params.movieId}`, {
+          headers: {
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTcxZDQ2MDBkOGEyMDAwMThhNDhhNTkiLCJpYXQiOjE3MDQ4OTcyOTAsImV4cCI6MTcwNjEwNjg5MH0.gKdA7EQ49nl_Yl12milacE3yQmFfnG09kMMCsKlRmf0",
+          },
+        });
+        if (!fetchComments.ok) {
           throw new Error("Errore nel fetch dei commenti da API interna");
         }
-        const commentsData = await internalApiResponse.json();
+        const commentsData = await fetchComments.json();
+        console.log(commentsData);
         setComments(commentsData);
 
         setLoading(false);
@@ -56,23 +59,41 @@ const MovieDetails = () => {
   }
 
   return (
-    <div className="text-white" style={{ backgroundColor: "#221f1f" }}>
-      <h2>Movie Details</h2>
-      <h3>Title: {movieDetails.Title}</h3>
-      <img src={movieDetails.Poster} alt={movieDetails.Title} />
-      <p>Year: {movieDetails.Year}</p>
-      <p>Plot: {movieDetails.Plot}</p>
+    <Container fluid>
+      <Row className="d-flex justify-content-center align-items-center">
+        <Col md={4}>
+          <Card bg="dark" text="white" className="my-5">
+            <Card.Body>
+              <Card.Title>{movieDetails.Title}</Card.Title>
+              <Card.Img
+                src={movieDetails.Poster}
+                alt={movieDetails.Title}
+                height={500}
+                className="object-fit-contain"
+              />
+              <Card.Text>
+                <strong>Year:</strong> {movieDetails.Year}
+              </Card.Text>
+              <Card.Text>
+                <strong>Plot:</strong> {movieDetails.Plot}
+              </Card.Text>
 
-      <h3>Comments:</h3>
-      <ul>
-        {comments.map((comment, index) => (
-          <li key={index}>
-            <strong>Rating:{comment.rate}</strong>
-            <p>{comment.comment}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
+              <Card.Text>
+                <strong>Comments:</strong>
+              </Card.Text>
+              <ul>
+                {comments.map((comment) => (
+                  <li key={comment._id}>
+                    <strong>Rating: {comment.rate}</strong>
+                    <p>{comment.comment}</p>
+                  </li>
+                ))}
+              </ul>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

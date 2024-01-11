@@ -7,6 +7,8 @@ const TvShows = () => {
       <Container fluid className="px-4">
         <h2 className="text-white">TV Shows</h2>
         <NetflixRow movieTitle="Hulk" />
+        <NetflixRow movieTitle="superman" />
+        <NetflixRow movieTitle="fast" />
       </Container>
     </div>
   );
