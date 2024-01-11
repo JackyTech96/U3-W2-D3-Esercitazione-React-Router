@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import NetflixFooter from "./NetflixFooter";
 
 const MovieDetails = () => {
   const params = useParams();
@@ -63,14 +62,14 @@ const MovieDetails = () => {
       <Row className="d-flex justify-content-center align-items-center">
         <Col md={4}>
           <Card bg="dark" text="white" className="my-5">
+            <Card.Img
+              variant="top"
+              src={movieDetails.Poster}
+              alt={movieDetails.Title}
+              className="img-fluid rounded-top object-fit-contain"
+            />
             <Card.Body>
               <Card.Title>{movieDetails.Title}</Card.Title>
-              <Card.Img
-                src={movieDetails.Poster}
-                alt={movieDetails.Title}
-                height={500}
-                className="object-fit-contain"
-              />
               <Card.Text>
                 <strong>Year:</strong> {movieDetails.Year}
               </Card.Text>
